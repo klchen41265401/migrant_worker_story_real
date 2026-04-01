@@ -322,9 +322,28 @@
           padding: 25px;
         }
       }
+
+      /* 滾動進度條樣式 */
+      .scroll-progress-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 4px;
+        background: linear-gradient(
+          90deg,
+          var(--primary) 0%,
+          #ff6b9d 50%,
+          var(--primary) 100%
+        );
+        width: 0;
+        z-index: 9999;
+        box-shadow: 0 2px 8px rgba(196, 30, 58, 0.3);
+        transition: width 0.1s ease-out;
+      }
     </style>
   </head>
   <body>
+    <div class="scroll-progress-bar" id="scrollProgressBar"></div>
     <header>
       <h1>跟越南移工認識的經過</h1>
       <p class="subtitle">完整真實紀錄 ─ 從陌生鄰居到情感糾葛的全過程</p>
@@ -2055,5 +2074,40 @@
       直接複製以上全部內容 → 新增文字檔 →
       存成「跟越南移工認識的經過.html」即可開啟閱讀
     </footer>
+
+    <script>
+      /**
+       * 滾動進度條
+       * 監聽頁面滾動事件，動態更新進度條寬度
+       */
+      (function () {
+        const progressBar = document.getElementById("scrollProgressBar");
+
+        /**
+         * 更新進度條寬度
+         * 根據視窗滾動位置計算進度百分比
+         */
+        function updateProgressBar() {
+          try {
+            // 計算滾動百分比
+            const windowHeight =
+              document.documentElement.scrollHeight - window.innerHeight;
+            const scrolled =
+              windowHeight > 0 ? (window.scrollY / windowHeight) * 100 : 0;
+
+            // 更新進度條寬度
+            progressBar.style.width = scrolled + "%";
+          } catch (error) {
+            console.warn("進度條更新失敗:", error);
+          }
+        }
+
+        // 監聽滾動事件
+        window.addEventListener("scroll", updateProgressBar);
+
+        // 首次加載時更新
+        updateProgressBar();
+      })();
+    </script>
   </body>
 </html>
