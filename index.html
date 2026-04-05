@@ -408,19 +408,333 @@
         color: white;
       }
 
-      @media (max-width: 768px) {
-        body {
-          padding: 0 14px 28px;
+      /* (RWD 斷點已統一移至心理分析區塊後方) */
+
+      /* 滾動進度條樣式 */
+      .scroll-progress-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 4px;
+        background: linear-gradient(
+          90deg,
+          var(--primary) 0%,
+          #ff6b9d 50%,
+          var(--primary) 100%
+        );
+        width: 0;
+        z-index: 9999;
+        box-shadow: 0 2px 8px rgba(196, 30, 58, 0.3);
+        transition: width 0.1s ease-out;
+      }
+
+      /* ─── 微動畫：區塊淡入 ─── */
+      .section,
+      .timeline-item,
+      header {
+        opacity: 0;
+        transform: translateY(18px);
+        transition:
+          opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+          transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+
+      .section.visible,
+      .timeline-item.visible,
+      header.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* 表格列 hover */
+      table tbody tr {
+        transition: background 0.2s ease;
+      }
+
+      table tbody tr:hover {
+        background: rgba(179, 49, 63, 0.04) !important;
+      }
+
+      /* ─── 心理分析完整版 - 標籤切換 ─── */
+      .analysis-tabs-wrapper {
+        margin-top: 40px;
+      }
+
+      .analysis-tabs-wrapper h2 {
+        text-align: center;
+        border-left: none;
+        padding-left: 0;
+        justify-content: center;
+      }
+
+      .analysis-tab-btns {
+        display: flex;
+        justify-content: center;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin: 28px 0;
+        position: sticky;
+        top: 72px;
+        z-index: 50;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(8px);
+        padding: 14px 16px;
+        border-radius: 16px;
+        border: 1px solid rgba(35, 46, 58, 0.06);
+        box-shadow: var(--shadow-soft);
+      }
+
+      .analysis-tab-btn {
+        padding: 12px 28px;
+        border: 2px solid var(--border);
+        border-radius: 999px;
+        background: var(--card-bg);
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        font-family: 'Noto Sans TC', system-ui, sans-serif;
+        color: var(--text-muted);
+        transition:
+          color 0.25s ease,
+          background 0.25s ease,
+          border-color 0.25s ease,
+          box-shadow 0.25s ease,
+          transform 0.2s ease;
+        white-space: nowrap;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .analysis-tab-btn::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          circle at center,
+          rgba(255, 255, 255, 0.25),
+          transparent 70%
+        );
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .analysis-tab-btn:hover::after {
+        opacity: 1;
+      }
+
+      .analysis-tab-btn:hover {
+        color: var(--primary);
+        border-color: rgba(179, 49, 63, 0.3);
+        background: var(--primary-light);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(179, 49, 63, 0.12);
+      }
+
+      .analysis-tab-btn:active {
+        transform: translateY(0) scale(0.97);
+      }
+
+      .analysis-tab-btn.active {
+        color: white;
+        background: var(--primary);
+        border-color: var(--primary);
+        box-shadow: 0 4px 20px rgba(179, 49, 63, 0.35);
+      }
+
+      .analysis-tab-btn.active-spicy {
+        background: linear-gradient(135deg, #e65100, #ff8f00);
+        border-color: #e65100;
+        color: white;
+        box-shadow: 0 4px 20px rgba(230, 81, 0, 0.35);
+      }
+
+      .analysis-tab-btn.active-ultimate {
+        background: linear-gradient(135deg, #1a1a1a, #424242);
+        border-color: #1a1a1a;
+        color: white;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+      }
+
+      .analysis-tab-panel {
+        display: none;
+        animation: tabFadeIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+
+      .analysis-tab-panel.active {
+        display: block;
+      }
+
+      @keyframes tabFadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(14px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .analysis-tab-panel .tab-header {
+        text-align: center;
+        padding: 24px 28px;
+        border-radius: 14px;
+        margin-bottom: 32px;
+        font-size: 0.93rem;
+        color: var(--text-muted);
+        line-height: 1.7;
+      }
+
+      .analysis-tab-panel .tab-header.neutral {
+        background: linear-gradient(135deg, #f0f4f8, #e8edf2);
+        border: 1px solid #d0d8e0;
+      }
+
+      .analysis-tab-panel .tab-header.spicy {
+        background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+        border: 1px solid #ffcc80;
+      }
+
+      .analysis-tab-panel .tab-header.ultimate {
+        background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+        border: 1px solid #bdbdbd;
+      }
+
+      .analysis-tab-panel h3 {
+        margin-top: 40px;
+      }
+
+      .analysis-tab-panel h4 {
+        margin-top: 32px;
+        margin-bottom: 14px;
+        color: var(--secondary);
+        font-size: 1.1rem;
+      }
+
+      .analysis-tab-panel .spicy-quote {
+        font-size: 1.08rem;
+        font-weight: 700;
+        color: #e65100;
+        text-align: center;
+        padding: 18px 24px;
+        border-left: 4px solid #e65100;
+        background: linear-gradient(135deg, #fff8f0, #fff3e0);
+        border-radius: 0 12px 12px 0;
+        margin: 24px 0;
+        line-height: 1.7;
+      }
+
+      .analysis-tab-panel .ultimate-quote {
+        font-size: 1.08rem;
+        font-weight: 700;
+        color: var(--primary);
+        text-align: center;
+        padding: 20px 24px;
+        background: linear-gradient(135deg, #fafafa, #f0f0f0);
+        border: 2px solid #1a1a1a;
+        border-radius: 12px;
+        margin: 24px 0;
+        line-height: 1.7;
+      }
+
+      .analysis-tab-panel table {
+        min-width: 540px;
+      }
+
+      .analysis-tab-panel ol,
+      .analysis-tab-panel ul {
+        padding-left: 22px;
+      }
+
+      .analysis-tab-panel ol li,
+      .analysis-tab-panel ul li {
+        margin-bottom: 10px;
+        line-height: 1.75;
+      }
+
+      /* ─── RWD 斷點：≤1200px（大平板 / 小桌面）─── */
+      @media (max-width: 1200px) {
+        :root {
+          --content-width: 960px;
+        }
+
+        .section {
+          padding: 36px;
+        }
+
+        .analysis-tab-btns {
+          gap: 12px;
+        }
+
+        .analysis-tab-btn {
+          padding: 11px 22px;
+        }
+      }
+
+      /* ─── RWD 斷點：≤992px（平板橫向）─── */
+      @media (max-width: 992px) {
+        :root {
+          --content-width: 100%;
+          --reading-width: 62ch;
         }
 
         header {
-          padding: 56px 20px 30px;
+          padding: 60px 24px 38px;
+        }
+
+        .summary-box {
+          gap: 24px;
+          padding: 26px;
+        }
+
+        .section {
+          padding: 32px 28px;
+          border-radius: 16px;
+        }
+
+        .timeline {
+          padding: 16px 16px 16px 50px;
+        }
+
+        .timeline-item {
+          padding: 26px;
+        }
+
+        .analysis-tab-btns {
+          top: 64px;
+          padding: 12px 14px;
+        }
+
+        table {
+          min-width: 600px;
+        }
+
+        .analysis-tab-panel table {
+          min-width: 480px;
+        }
+      }
+
+      /* ─── RWD 斷點：≤768px（平板直向）─── */
+      @media (max-width: 768px) {
+        :root {
+          --reading-width: 100%;
+        }
+
+        body {
+          padding: 0 14px 28px;
+          line-height: 1.78;
+        }
+
+        header {
+          padding: 48px 20px 30px;
           margin-top: 14px;
+          border-radius: 20px;
         }
 
         .nav-container {
           top: 8px;
           padding: 10px;
+          border-radius: 14px;
         }
 
         .nav-links {
@@ -429,10 +743,13 @@
           overflow-x: auto;
           padding-bottom: 2px;
           scrollbar-width: thin;
+          gap: 8px;
         }
 
         .nav-links a {
           flex: 0 0 auto;
+          font-size: 0.9rem;
+          padding: 7px 12px;
         }
 
         .summary-box {
@@ -456,11 +773,18 @@
 
         .section {
           padding: 26px 20px;
+          border-radius: 14px;
+          margin: 24px 0;
         }
 
         h2 {
           margin-top: 42px;
           padding-left: 14px;
+          font-size: 1.35rem;
+        }
+
+        h3 {
+          font-size: 1.18rem;
         }
 
         p,
@@ -472,56 +796,347 @@
         th,
         td {
           padding: 12px;
+          font-size: 0.95rem;
+        }
+
+        .analysis-tab-btns {
+          top: 56px;
+          gap: 10px;
+          padding: 10px 12px;
+          border-radius: 12px;
+        }
+
+        .analysis-tab-btn {
+          padding: 10px 18px;
+          font-size: 0.92rem;
+        }
+
+        .analysis-tab-panel .tab-header {
+          padding: 18px 20px;
+          font-size: 0.88rem;
+        }
+
+        .analysis-tab-panel .spicy-quote,
+        .analysis-tab-panel .ultimate-quote {
+          font-size: 1rem;
+          padding: 14px 18px;
+        }
+
+        footer {
+          padding: 42px 18px;
+          border-radius: 20px 20px 0 0;
+          font-size: 0.92rem;
         }
       }
 
-      @media (max-width: 560px) {
-        .hero-note {
-          font-size: 0.84rem;
+      /* ─── RWD 斷點：≤600px（大手機）─── */
+      @media (max-width: 600px) {
+        body {
+          padding: 0 10px 24px;
+        }
+
+        header {
+          padding: 40px 16px 24px;
+          border-radius: 16px;
+        }
+
+        h1 {
+          font-size: 1.8rem;
         }
 
         .subtitle {
-          margin-bottom: 26px;
+          font-size: 0.98rem;
+          margin-bottom: 24px;
+        }
+
+        .hero-note {
+          font-size: 0.84rem;
+          padding: 6px 12px;
         }
 
         .summary-box {
-          border-radius: 16px;
+          border-radius: 14px;
+          padding: 18px;
+        }
+
+        .section {
+          padding: 22px 16px;
+          border-radius: 12px;
         }
 
         .timeline-item {
           padding: 22px 18px 18px;
           margin-bottom: 32px;
+          border-radius: 12px;
         }
 
         .date-tag {
           font-size: 0.88rem;
+          padding: 4px 12px;
         }
 
         .erotic {
-          padding: 22px 16px;
+          padding: 20px 14px;
+          border-radius: 0 10px 10px 0;
+        }
+
+        .erotic::after {
+          font-size: 0.68rem;
+        }
+
+        table {
+          min-width: 520px;
+        }
+
+        .analysis-tab-btns {
+          top: 50px;
+          gap: 8px;
+          padding: 8px 10px;
+        }
+
+        .analysis-tab-btn {
+          padding: 9px 14px;
+          font-size: 0.88rem;
+          border-width: 1.5px;
+        }
+
+        .analysis-tabs-wrapper h2 {
+          font-size: 1.25rem;
+        }
+
+        .analysis-tab-panel h3 {
+          font-size: 1.1rem;
+          margin-top: 30px;
+        }
+
+        .analysis-tab-panel table {
+          min-width: 420px;
         }
 
         footer {
-          padding: 42px 18px;
+          padding: 36px 14px;
         }
       }
 
-      /* 滾動進度條樣式 */
-      .scroll-progress-bar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 4px;
-        background: linear-gradient(
-          90deg,
-          var(--primary) 0%,
-          #ff6b9d 50%,
-          var(--primary) 100%
-        );
-        width: 0;
-        z-index: 9999;
-        box-shadow: 0 2px 8px rgba(196, 30, 58, 0.3);
-        transition: width 0.1s ease-out;
+      /* ─── RWD 斷點：≤420px（小手機）─── */
+      @media (max-width: 420px) {
+        body {
+          padding: 0 8px 20px;
+          line-height: 1.72;
+        }
+
+        header {
+          padding: 32px 14px 20px;
+          border-radius: 14px;
+        }
+
+        h1 {
+          font-size: 1.55rem;
+          letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+          font-size: 0.92rem;
+        }
+
+        .hero-note {
+          font-size: 0.78rem;
+        }
+
+        .nav-container {
+          top: 6px;
+          padding: 8px;
+          border-radius: 10px;
+        }
+
+        .nav-links a {
+          font-size: 0.82rem;
+          padding: 6px 10px;
+        }
+
+        .summary-box {
+          padding: 14px;
+          gap: 12px;
+        }
+
+        .summary-item h4 {
+          font-size: 0.95rem;
+        }
+
+        .summary-item p {
+          font-size: 0.92rem;
+        }
+
+        .section {
+          padding: 18px 14px;
+          margin: 18px 0;
+        }
+
+        h2 {
+          font-size: 1.2rem;
+          padding-left: 12px;
+          border-left-width: 4px;
+          margin-top: 32px;
+          margin-bottom: 18px;
+        }
+
+        h3 {
+          font-size: 1.05rem;
+          margin-top: 28px;
+        }
+
+        p,
+        li {
+          font-size: 0.94rem;
+          margin-bottom: 14px;
+        }
+
+        th,
+        td {
+          padding: 10px 8px;
+          font-size: 0.88rem;
+        }
+
+        .timeline {
+          padding: 8px 0 8px 24px;
+        }
+
+        .timeline::before {
+          left: 7px;
+        }
+
+        .timeline-item::before {
+          left: -22px;
+          width: 14px;
+          height: 14px;
+          border-width: 3px;
+          top: 24px;
+        }
+
+        .timeline-item {
+          padding: 18px 14px 14px;
+          margin-bottom: 24px;
+        }
+
+        .erotic {
+          padding: 16px 12px;
+          margin: 20px 0;
+        }
+
+        .analysis-tab-btns {
+          top: 44px;
+          flex-direction: column;
+          align-items: stretch;
+          gap: 6px;
+          padding: 8px;
+          border-radius: 10px;
+        }
+
+        .analysis-tab-btn {
+          padding: 10px 14px;
+          font-size: 0.86rem;
+          text-align: center;
+          border-radius: 10px;
+        }
+
+        .analysis-tabs-wrapper h2 {
+          font-size: 1.15rem;
+        }
+
+        .analysis-tab-panel .tab-header {
+          padding: 14px;
+          font-size: 0.84rem;
+          border-radius: 10px;
+        }
+
+        .analysis-tab-panel .spicy-quote,
+        .analysis-tab-panel .ultimate-quote {
+          font-size: 0.92rem;
+          padding: 12px 14px;
+        }
+
+        .analysis-tab-panel table {
+          min-width: 360px;
+        }
+
+        .analysis-tab-panel ol,
+        .analysis-tab-panel ul {
+          padding-left: 18px;
+        }
+
+        footer {
+          padding: 28px 12px;
+          font-size: 0.85rem;
+          border-radius: 14px 14px 0 0;
+        }
+      }
+
+      /* ─── RWD 斷點：≤360px（極小手機）─── */
+      @media (max-width: 360px) {
+        body {
+          padding: 0 6px 16px;
+        }
+
+        header {
+          padding: 28px 10px 18px;
+          border-radius: 12px;
+        }
+
+        h1 {
+          font-size: 1.35rem;
+        }
+
+        .subtitle {
+          font-size: 0.86rem;
+        }
+
+        .summary-box {
+          padding: 12px;
+        }
+
+        .section {
+          padding: 16px 12px;
+        }
+
+        h2 {
+          font-size: 1.1rem;
+        }
+
+        .analysis-tab-btn {
+          font-size: 0.82rem;
+          padding: 8px 12px;
+        }
+
+        .analysis-tab-panel h3 {
+          font-size: 1rem;
+        }
+
+        table {
+          min-width: 440px;
+        }
+
+        .analysis-tab-panel table {
+          min-width: 320px;
+        }
+      }
+
+      /* ─── 減少動畫偏好 ─── */
+      @media (prefers-reduced-motion: reduce) {
+        .section,
+        .timeline-item,
+        header {
+          opacity: 1;
+          transform: none;
+          transition: none;
+        }
+
+        .analysis-tab-panel {
+          animation: none;
+        }
+
+        .analysis-tab-btn {
+          transition: none;
+        }
       }
     </style>
   </head>
@@ -569,17 +1184,85 @@
       </div>
 
       <div id="intro" class="section">
-        <h3>前情提要</h3>
-        <p>
-          小恩是29歲碩士畢業，任職醫療器材研發工程師。越南移工是21歲高職汽車科肆業，剛認識時做工程（主要打石）。
+        <h3>前情提要與背景（2024-01 以前）</h3>
+        <details>
+          <summary
+            style="
+              cursor: pointer;
+              color: var(--primary);
+              font-weight: bold;
+              padding: 10px;
+              border: 1px dashed var(--primary);
+              border-radius: 8px;
+            "
+          >
+            ▶ 點擊展開：戎狄自述之過去經歷與觀察紀錄
+          </summary>
+          <div
+            style="
+              padding: 20px;
+              background: rgba(0, 0, 0, 0.02);
+              margin-top: 10px;
+              border-radius: 8px;
+            "
+          >
+            <p style="font-size: 0.9rem; color: var(--text-muted)">
+              ※ 以下內容為戎狄口述之過去碎片，或小恩早期觀察紀錄。
+            </p>
+
+            <h4>❤️ 西門前女友 (未成年時期)</h4>
+            <p>
+              戎狄極度愛過的一任。兩人在西門町認識，當時都在 U2
+              發生關係（未成年），而且瘋狂打炮，移工一天內高潮內射非常多次。戎狄在大園工作期間
+              (遠雄國際貿易港區)，每天騎車去西門找她，承諾未來要結婚照顧她。他曾寄宿於女方家，像家人一樣幫忙準備便當、打理家務。分手原因是因為跨年時的一次玩笑話（乾哥群慫恿他提分手），戎狄酒後拉不下面子挽回，之後消沉數月酗酒。
+            </p>
+
+            <h4>🪳 高雄前女友 (第一任)</h4>
+            <p>
+              描述較少，戎狄自述對方很漂亮。分手後戎狄在高雄家每天哭泣酗酒，但小恩推測這段感情缺乏對未來的實質規劃。
+            </p>
+
+            <h4>🐖 阿庭家與草莓 (寄宿與決裂)</h4>
+            <p>
+              透過乾哥認識阿庭的妹妹「草莓」並與之交往，隨後搬入阿庭家。戎狄當時因渴望家庭，幫忙顧小孩、分擔家事，對阿庭入獄的老公也給予支持
+              (阿庭老公是酒駕入獄)。戎狄對草莓並無深厚感情
+              (雖然戎狄本身自述是愛她但事實上不是)，多為生理需求（曾自豪龜頭很大描述將對方頂到淫叫高潮）。後因不明原因與阿庭家決裂（戎狄自稱欠租，但小恩懷疑有其他債務糾紛），被這群人聯手討債。
+            </p>
+
+            <h4>🐒 乾哥與黑道背景</h4>
+            <p>
+              從小三認識至今的玩伴。乾哥性格懦弱，後加入四海幫正式成員。移工早期只是圍事，但乾哥將移工拖入債務泥淖，甚至在移工被軟禁討債時默不作聲。這群人屬於典型的社會底層，為了利益可以出賣多年交情。
+            </p>
+
+            <h4>父、姊與原生家庭</h4>
+            <ul>
+              <li>
+                <strong>戎狄父：</strong>管教極端嚴厲，曾限制戎狄 17
+                歲前只能在三峽市區活動。因幫戎狄償還 8 萬賭債後將其趕出家門。
+              </li>
+              <li>
+                <strong>戎狄姊/阿ㄇ：</strong
+                >家族成員極具愛心，曾努力照顧戎狄成長。戎狄姊描述戎狄曾是敏感纖細的孩子，失戀會狂哭酗酒。但在
+                2025 年後，家人對其反覆的欺騙與惡劣態度已感絕望。
+              </li>
+            </ul>
+
+            <h4>其他關聯人物</h4>
+            <p>
+              <strong>三峽前女友：</strong>曾資助戎狄生活（辦門號、租屋等約 2
+              萬），但戎狄對其不斷污衊。兩人有親密合照但未發生關係，戎狄堅持僅是曖昧。<strong>蘆洲女/哈士凌：</strong>戎狄曾與其短暫同住，對其女兒感情極好，蘆洲女也曾多次請客資助戎狄。
+            </p>
+          </div>
+        </details>
+
+        <p style="margin-top: 20px">
+          小恩是 29 歲碩士畢業，任職醫療器材研發工程師。越南移工（張戎狄）是 21
+          歲高職汽車科肆業，剛認識時做粗工。
         </p>
         <p>
-          越南移工是中壢租屋的鄰居房客A房，小恩是C房，以下通稱移工，其實是新住民。
+          移工是中壢租屋的鄰居房客 A 房，小恩是 C 房。目前紀錄已更新至 2026 年 4
+          月，揭露其長期「情感寄生」與「迴避行為」的惡循環。
         </p>
-        <p>
-          在還沒認識以前，小恩就發現A房時常鞋子很髒、泥土很多，可能是做工程的人。
-        </p>
-        <p>目前事情仍然很混亂，暫時以時間軸講述認識經過。</p>
       </div>
 
       <div class="timeline">
@@ -1942,6 +2625,19 @@
           <p>移工在高雄新竹貨運工作，沒機車每天腳踏車上下班。</p>
         </div>
 
+        <div class="timeline-item">
+          <span class="date-tag">2025 年中旬 ─ 隱藏的轉折</span>
+          <p>
+            外表看起來移工變好了，會主動討論工作，甚至有穩定還款給小恩。但實際上，根據
+            2026 年 4
+            月與家屬聯繫得知，移工從這段時間開始完全不跟家裡聯絡，回家不打招呼，且頻繁換工作（一年換
+            5
+            份）。他在家人面前表現得極度叛逆且頂嘴，最後與姊姊完全斷聯。<strong
+              >這顯示移工當時的「好轉」僅是針對小恩的演技，或是他在不同宿主間切換的面具。</strong
+            >
+          </p>
+        </div>
+
         <h2 id="m2026">2026 ─ 最終局與救贖契約</h2>
 
         <div class="timeline-item">
@@ -2127,176 +2823,1121 @@
           <span class="date-tag">3/29</span>
           <p>修正移工的故事，以及把過往的故事記錄都記錄清楚。</p>
         </div>
+
+        <div class="timeline-item" id="m20260404">
+          <span class="date-tag">2026/04/04 ─ 契約到期與失蹤</span>
+          <p>契約回應截止日。移工整天不接電話，直到 4/5 凌晨一點才已讀不回。</p>
+          <p>
+            <strong>謊言揭穿：</strong
+            >小恩打電話給移工高雄家人，發現事態嚴重。移工自述「這周才要搬出去住」，實際上上個月就沒回家過了。他聲稱「有存幾萬元」且「每月還款」，但錢的來源不明（工作極不穩定），家人推測其說法與現實有極大落差。
+          </p>
+          <p>
+            <strong>現任女友接觸：</strong
+            >小恩肉搜並聯繫其現任女友，警告其移工的過去債務（20w+）與迴避性格，勸其分手。女友初時充滿戒心，認為小恩想搶男友，隨後引發激烈對話。
+          </p>
+        </div>
+
+        <div class="timeline-item">
+          <span class="date-tag">2026/04/05 ─ 與現任女友對話節錄</span>
+          <div
+            style="
+              background: #f0f4f8;
+              padding: 20px;
+              border-radius: 12px;
+              border: 1px solid #d1d9e6;
+              font-size: 0.95rem;
+            "
+          >
+            <p>
+              <strong>小恩：</strong
+              >「勸你馬上跟張絨狄分手...他現在的狀況很不好，他家人都很好但是他對家人都很差...如果你想知道更多事情，傳信箱訊息給我。」
+            </p>
+            <p>
+              <strong>現任女友：</strong
+              >「你這樣做心理壓力很大...你叫他跟我分手是好讓他去你身邊嗎？」
+            </p>
+            <p>
+              <strong>小恩：</strong
+              >「我不缺他。我給他契約是給他機會翻身，不代表有愛就要跟他在一起...他在我懷裡會哭會笑撒嬌，願意面對過去。但現在的他只是想交個女友死會逃避現實。妳的能力不可能處理他，除非妳想負債
+              20 幾萬。」
+            </p>
+          </div>
+          <p style="margin-top: 15px">
+            <strong>最終決定：</strong
+            >小恩與母親一致認為，即使移工答應契約，也不可能再讓他回中壢。此人已進入「完全逃避模式」，重複過往所有背叛模式。小恩決定完全放下，將其過往惡行完整公開於網頁，作為最後的清算。
+          </p>
+        </div>
       </div>
 
       <div id="analysis" class="section analysis-section">
-        <h3>移工／小恩人格分析</h3>
-        <p>
-          這是一份將這段複雜的人際互動，轉化為中性行為科學描述的結構表格。你可以直接複製到你的Side
-          Project或寫作草稿中。
+        <h2
+          style="
+            border-left: 5px solid var(--secondary);
+            color: var(--secondary);
+          "
+        >
+          張戎狄心理狀態深度分析報告 (2026-04-05)
+        </h2>
+
+        <div style="margin-bottom: 30px">
+          <p>
+            以下報告分為三個維度：<strong>【臨床觀察綜述】</strong>、<strong>【毒辣真實版】</strong>、<strong>【終極寄生拆解】</strong>。
+          </p>
+        </div>
+
+        <h3
+          style="
+            background: var(--secondary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+          "
+        >
+          一、臨床觀察：結構化迴避與依附創傷
+        </h3>
+        <div class="table-container">
+          <table>
+            <tr>
+              <th>核心機制</th>
+              <th>具體行為表現</th>
+              <th>成因分析</th>
+            </tr>
+            <tr>
+              <td><strong>系統性迴避 (Avoidance)</strong></td>
+              <td>對家人、照顧者、債務、責任全面已讀不回或消失。</td>
+              <td>將「不回應」作為唯一的防禦手段，以維持表面的心理平衡。</td>
+            </tr>
+            <tr>
+              <td><strong>迴避型依附 (Avoidant Attachment)</strong></td>
+              <td>
+                交往即搬入對方家（寄生），但從不談論未來；壓力下立刻撤退。
+              </td>
+              <td>早期母職缺失與父親情感隔離，形成「依賴必被拋棄」的恐懼。</td>
+            </tr>
+            <tr>
+              <td><strong>寄宿行為循環 (Nesting Cycle)</strong></td>
+              <td>阿庭家 → 小恩家 → 高雄家 → 現任女友。</td>
+              <td>尋找「家的功能」（免錢旅館/照顧）而非尋找愛。</td>
+            </tr>
+            <tr>
+              <td><strong>物質依賴影響</strong></td>
+              <td>重度菸癮與酗酒史。</td>
+              <td>長期大腦獎勵迴路受損，導致情緒調節困難、衝動控制力極低。</td>
+            </tr>
+          </table>
+        </div>
+
+        <h3
+          style="
+            background: #b3313f;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+          "
+        >
+          二、毒辣版：情感寄生循環 (Parasitic Cycle)
+        </h3>
+        <div
+          style="
+            padding: 20px;
+            border: 2px solid #b3313f;
+            border-radius: 12px;
+            margin-top: 20px;
+          "
+        >
+          <p>
+            <strong>「這不是壞人，這是一個把所有人都變成配角的人。」</strong>
+          </p>
+          <ol>
+            <li>
+              <strong>裝乖期：</strong
+              >進入新關係，煮飯、拖地、撒嬌，全套表演到位，尋找宿主。
+            </li>
+            <li>
+              <strong>原形畢露期：</strong
+              >開始小謊言、花錢異常、員購酒、偷買點數。
+            </li>
+            <li>
+              <strong>防禦期：</strong
+              >已讀不回、態度惡劣，把對他最好的人當作出氣筒。
+            </li>
+            <li>
+              <strong>Reset 期：</strong
+              >關係崩壞，帶著別人的錢與時間消失，尋找下一個「免錢旅館」。
+            </li>
+          </ol>
+          <p>
+            <strong>毒辣點評：</strong
+            >他就像一台壞掉的暖爐，誰靠近誰被燒。他的感情保質期只有半年，面具掉了就換下一個觀眾。
+          </p>
+        </div>
+
+        <h3
+          style="
+            background: #000;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+          "
+        >
+          三、終極版：情感掠奪者 (Emotional Predator)
+        </h3>
+        <div
+          style="
+            padding: 20px;
+            border: 2px solid #000;
+            background: #f9f9f9;
+            border-radius: 12px;
+            margin-top: 20px;
+          "
+        >
+          <p>
+            <strong>停止用「受傷的孩子」來洗白，他只是精於算計的廢人。</strong>
+          </p>
+          <ul>
+            <li>
+              <strong>選擇性社恐：</strong>面對債主時社恐，但在網路上偷買 $5,640
+              點數、跟妹子玩時比誰都穩。
+            </li>
+            <li>
+              <strong>受害者心理：</strong
+              >利用「母親拋棄、父親嚴厲」作為墮落、賭博、說謊的免死金牌。
+            </li>
+            <li>
+              <strong>給現任宿主的預言：</strong>前 3 個月妳是他的光，第 6
+              個月後妳只是一張被刷爆的信用卡。
+            </li>
+          </ul>
+          <p style="font-weight: bold; color: #b3313f; text-align: center">
+            「對張戎狄這種人，最好的拯救就是『不救』。只要有人餵他一口軟飯，他就永遠不會站起來走路。」
+          </p>
+        </div>
+
+        <h4>投資報酬率分析 (ROI)</h4>
+        <div class="table-container">
+          <table>
+            <tr>
+              <th>投入者</th>
+              <th>付出成本</th>
+              <th>戎狄的回報</th>
+            </tr>
+            <tr>
+              <td>小恩</td>
+              <td>2 年時間 + 數十萬金錢 + 心理支持 + 法律奔波</td>
+              <td>惡劣態度 + 偷買點數 + 消失</td>
+            </tr>
+            <tr>
+              <td>家人 (姊/伯母)</td>
+              <td>養育之恩 + 8 萬代償賭債</td>
+              <td>頂嘴 + 斷聯</td>
+            </tr>
+            <tr>
+              <td>阿庭家</td>
+              <td>收留住處 + 信任</td>
+              <td>不繳房租 + 偷竊嫌疑 (金戒指)</td>
+            </tr>
+          </table>
+          <p style="text-align: right; font-weight: bold">投資報酬率： -∞</p>
+        </div>
+      </div>
+
+      <!-- 心理狀態分析完整版 - 可切換標籤 -->
+      <div id="analysis-full" class="section analysis-tabs-wrapper">
+        <h2>📋 心理狀態完整分析報告</h2>
+        <p
+          style="
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+          "
+        >
+          以下三份完整報告提供不同角度的深度分析，點擊標籤切換查看：
         </p>
-        <p>
-          這份表格將行為模式從「道德判斷」抽離，轉化為<strong>「系統運作邏輯」與「特徵向量」</strong>，方便你進行後續的敘事創作或邏輯拆解。
-        </p>
 
-        <h4>一、對象（戎狄）：行為模式與人格特質</h4>
-        <div class="table-container">
-          <table>
-            <tr>
-              <th>核心特質（中性描述）</th>
-              <th>行為定義</th>
-              <th>故事對應內文（實例）</th>
-            </tr>
-            <tr>
-              <td>高度避險機制 (High Avoidance)</td>
-              <td>優先採取降低當下心理壓力的動作，而非解決根源問題。</td>
-              <td>
-                面對長期職涯規劃時頻繁回應「不知道」；選擇與無需面對過去的女友同居以逃避自我審視。
-              </td>
-            </tr>
-            <tr>
-              <td>即時反饋導向 (Immediate Reward Orientation)</td>
-              <td>傾向於獲取即時的感官或心理滿足，對長遠目標的耐受力較低。</td>
-              <td>
-                收入約3萬但每月支出近8000元於菸酒消遣；選擇與提供情緒陪伴的對象同居而非接受專業訓練。
-              </td>
-            </tr>
-            <tr>
-              <td>外部歸因傾向 (External Locus of Control)</td>
-              <td>
-                將生活現狀與決策結果歸因於環境、運氣或他人要求，較少進行自我覺察。
-              </td>
-              <td>
-                頻繁更換工作（一年5份）並視為環境不適；將對成長壓力的焦慮轉化為對援助者的反感。
-              </td>
-            </tr>
-            <tr>
-              <td>低結構化執行力 (Low Structural Execution)</td>
-              <td>
-                在缺乏物理監控或強大外力介入下，難以維持穩定的生活規律與計畫。
-              </td>
-              <td>
-                離開共同居住環境後，戒菸與學習進度迅速中斷；無法獨立執行預算管理與法律義務處理。
-              </td>
-            </tr>
-            <tr>
-              <td>情感依附優先 (Relational Dependency)</td>
-              <td>
-                核心安全感來自於「身邊有人陪伴」，而非個人的成就感或社會地位。
-              </td>
-              <td>
-                寧願在經濟拮据的情況下與同層級對象同居，以換取即時的情感緩衝與止痛。
-              </td>
-            </tr>
-          </table>
+        <div class="analysis-tab-btns">
+          <button
+            class="analysis-tab-btn active"
+            data-tab="neutral"
+            onclick="switchAnalysisTab('neutral')"
+          >
+            🔬 中立醫療版
+          </button>
+          <button
+            class="analysis-tab-btn"
+            data-tab="spicy"
+            onclick="switchAnalysisTab('spicy')"
+          >
+            🌶️ 超級毒辣版
+          </button>
+          <button
+            class="analysis-tab-btn"
+            data-tab="ultimate"
+            onclick="switchAnalysisTab('ultimate')"
+          >
+            💀 終極毒辣真實版
+          </button>
         </div>
 
-        <h4>二、敘事者（健恩）：行為模式與人格特質</h4>
-        <div class="table-container">
-          <table>
-            <tr>
-              <th>核心特質（中性描述）</th>
-              <th>行為定義</th>
-              <th>故事對應內文（實例）</th>
-            </tr>
-            <tr>
-              <td>系統優化思維 (System Optimization)</td>
-              <td>
-                傾向於將人際關係與生活目標轉化為可量化、可優化的邏輯架構。
-              </td>
-              <td>
-                撰寫詳盡的同居契約與10年職涯規律；利用試算表精確計算對方的生活成本與風險。
-              </td>
-            </tr>
-            <tr>
-              <td>主動干預主義 (Active Interventionism)</td>
-              <td>
-                當識別到系統性風險時，會投入大量資源（時間、金錢、法律支援）進行強力校正。
-              </td>
-              <td>
-                肉身對抗組織勢力、處理法律文件、提供極低門檻的住房與硬體設備以尋求救贖。
-              </td>
-            </tr>
-            <tr>
-              <td>高效能運作慣性 (High-Efficiency Habituation)</td>
-              <td>
-                習慣以高產值、高自律的標準運作，並傾向於以此標準評估外部系統的潛力。
-              </td>
-              <td>
-                以半導體產業的年終與穩定性作為對照基準；要求對方在壓力下仍須維持學習頻寬。
-              </td>
-            </tr>
-            <tr>
-              <td>數據驅動決策 (Data-Driven Decision Making)</td>
-              <td>
-                透過歷史行為紀錄與財務數據，對關係的持續性進行損益評估與風險預測。
-              </td>
-              <td>
-                根據對方存款備用金的達成狀況決定是否給予最後機會；分析對方換職頻率以判斷系統穩定度。
-              </td>
-            </tr>
-            <tr>
-              <td>結構化慈悲 (Structured Compassion)</td>
-              <td>
-                提供幫助時伴隨著明確的對價與成長要求，並非無條件的施予，而是目標導向的投資。
-              </td>
-              <td>
-                提供房租補貼與設備，但附加「戒菸、學習、公開承諾」等契約條款作為前提。
-              </td>
-            </tr>
-          </table>
+        <!-- ===== 中立醫療版 ===== -->
+        <div id="tab-neutral" class="analysis-tab-panel active">
+          <div class="tab-header neutral">
+            📋 基於行為觀察的推論分析，非臨床診斷<br />
+            ⚠
+            本分析基於小恩長期觀察紀錄、家屬訪談、行為時間線與對話紀錄。所有推論僅供參考，正式評估需由精神科醫師或臨床心理師進行。
+          </div>
+
+          <h3>一、基本背景</h3>
+          <div class="table-container">
+            <table>
+              <tr>
+                <th>項目</th>
+                <th>內容</th>
+              </tr>
+              <tr>
+                <td>年齡</td>
+                <td>23 歲（2026 年）</td>
+              </tr>
+              <tr>
+                <td>學歷</td>
+                <td>高職汽車科肄業</td>
+              </tr>
+              <tr>
+                <td>家庭背景</td>
+                <td>
+                  越南母親生下後離開、父親再婚後離婚、繼母帶走同父異母弟弟
+                </td>
+              </tr>
+              <tr>
+                <td>成長環境</td>
+                <td>屏東車城 → 高雄鳳山 → 三峽（小三後）</td>
+              </tr>
+              <tr>
+                <td>主要照顧者</td>
+                <td>父親（嚴厲管控型）、姊姊/伯母（有愛但後來放棄）</td>
+              </tr>
+            </table>
+          </div>
+
+          <h3>二、行為模式觀察</h3>
+          <h4>2.1 反覆出現的迴避行為（Avoidance Pattern）</h4>
+          <p>
+            戎狄的行為中最顯著且一致的模式是<strong>系統性迴避</strong>，表現為：
+          </p>
+          <ul>
+            <li>
+              <strong>對家人的迴避</strong
+              >：姊姊、伯母的關心訊息長期已讀不回。父親的訊息除法院傳票外一律不回應。2025
+              年中開始完全不打招呼、不回家。
+            </li>
+            <li>
+              <strong>對親密關係的迴避</strong
+              >：當關係進入需要承諾或面對問題的階段，即開始疏遠、態度惡劣、找藉口製造衝突。
+            </li>
+            <li>
+              <strong>對責任的迴避</strong
+              >：欠款不面對、工作問題不事先告知、搬家時間說謊、花錢流向不交代。
+            </li>
+            <li>
+              <strong>對自我的迴避</strong
+              >：不願回顧過去、不願面對自己的價值觀問題、不願承認需要幫助。
+            </li>
+          </ul>
+          <p>
+            <strong>關鍵特徵</strong
+            >：迴避模式在不同情境中表現完全一致，顯示這是一種<strong
+              >結構化的因應策略（coping mechanism）</strong
+            >，而非針對特定事件的反應。
+          </p>
+
+          <h4>2.2 依附模式（Attachment Pattern）</h4>
+          <div class="table-container">
+            <table>
+              <tr>
+                <th>特徵</th>
+                <th>戎狄的具體表現</th>
+              </tr>
+              <tr>
+                <td>渴望親密但恐懼依賴</td>
+                <td>交往後會搬進對方家住（寄宿行為），但從不談論未來</td>
+              </tr>
+              <tr>
+                <td>迴避情感表達</td>
+                <td>說不知道怎麼跟男生/女生表達；被問愛不愛回答「不知道」</td>
+              </tr>
+              <tr>
+                <td>在壓力下撤退</td>
+                <td>面對關心或要求時選擇已讀不回、換帳號、不接電話</td>
+              </tr>
+              <tr>
+                <td>關係中的功能性角色</td>
+                <td>
+                  透過「照顧家務」「顧小孩」取得留在家庭中的正當性，而非透過情感連結
+                </td>
+              </tr>
+              <tr>
+                <td>失去關係後的反應</td>
+                <td>極度痛苦（哭泣、酗酒數月），但不會主動修復</td>
+              </tr>
+            </table>
+          </div>
+
+          <h4>2.3 寄宿行為模式（Repeated "Nesting" Behavior）</h4>
+          <ol>
+            <li>
+              <strong>阿庭家</strong> → 幫忙顧小孩、做家事、付生活費 → 被趕出
+            </li>
+            <li>
+              <strong>小恩家（中壢）</strong> → 被照顧、搭伙共居 →
+              因行為問題搬離
+            </li>
+            <li>
+              <strong>台南住處</strong> → 由小恩安排 → 因說謊和金錢問題搬回高雄
+            </li>
+            <li>
+              <strong>高雄家</strong> → 短暫回歸 → 不打招呼、不回家、再度搬出
+            </li>
+            <li><strong>現任女友</strong> → 疑似再度同居 → 結果待觀察</li>
+          </ol>
+          <p>
+            <strong>分析</strong
+            >：此行為反映的是<strong>對「家庭」概念的渴望</strong>，而非對特定對象的情感。戎狄尋找的是「家的功能」（安全、穩定、歸屬），而非「關係中的愛」。
+          </p>
+
+          <h3>三、可能涉及的心理議題</h3>
+          <h4>3.1 迴避型人格特質（Avoidant Personality Traits）</h4>
+          <ul>
+            <li>
+              他在特定關係初期（如與小恩 2024 年 1-6
+              月）<strong>能夠展現情感</strong>——哭泣、撒嬌、表達在乎
+            </li>
+            <li>
+              顯示其迴避行為可能更偏向<strong>習得性因應策略</strong>，而非人格結構的核心缺陷
+            </li>
+            <li>在安全且持續的環境中，他曾短暫展現出真實自我</li>
+          </ul>
+
+          <h4>3.2 早期依附創傷（Early Attachment Trauma）</h4>
+          <ul>
+            <li><strong>母親出生後即離開</strong>：最原始的依附對象缺失</li>
+            <li>
+              <strong>父親的情感隔離</strong
+              >：管教嚴厲但不表達愛，造成「被管控但不被愛」的認知框架
+            </li>
+            <li>
+              <strong>17 歲被趕出家門</strong
+              >：正值青少年自我認同形成期，強化了「我不值得被留住」的核心信念
+            </li>
+          </ul>
+          <p>可能形成的<strong>核心信念（Core Beliefs）</strong>：</p>
+          <ul>
+            <li>「依賴他人最終會被拋棄或出賣」</li>
+            <li>「付出不會被感激」</li>
+            <li>「我不值得被真正愛」</li>
+          </ul>
+
+          <h4>3.3 物質依賴的神經學影響</h4>
+          <div class="table-container">
+            <table>
+              <tr>
+                <th>物質</th>
+                <th>使用情形</th>
+              </tr>
+              <tr>
+                <td>菸</td>
+                <td>長期重度吸菸，2024 年戒菸後疑似復吸</td>
+              </tr>
+              <tr>
+                <td>酒</td>
+                <td>失戀後長期酗酒、工作壓力下每日飲酒、員購酒事件</td>
+              </tr>
+            </table>
+          </div>
+          <p>
+            <strong>神經學觀點</strong
+            >：長期尼古丁與酒精使用會改變大腦的<strong>獎勵迴路</strong>和<strong>前額葉皮質</strong>功能，導致情緒調節困難、衝動控制下降、延遲滿足能力減低。小恩觀察到「近距離相處且持續親密接觸後幾天會比較穩定」——可能與<strong>催產素（Oxytocin）</strong>分泌有關，但此效果為暫時性。
+          </p>
+
+          <h4>3.4 可能的情緒障礙</h4>
+          <ul>
+            <li>
+              <strong>持續性低自尊</strong
+              >：妄自菲薄（「你不會選擇我」）、認為自己跟小恩很不配
+            </li>
+            <li>
+              <strong>陣發性情緒崩潰</strong>：突然大哭 15 分鐘、自述有憂鬱症
+            </li>
+            <li>
+              <strong>快感缺失傾向</strong
+              >：周末整天睡覺、沒有自己的生活、不會自主規劃行程
+            </li>
+            <li>
+              <strong>人際退縮加劇</strong>：2025 年中起全面斷絕社交與家庭連結
+            </li>
+          </ul>
+
+          <h3>四、行為循環模型</h3>
+          <div
+            style="
+              background: #f8f9fa;
+              padding: 24px;
+              border-radius: 12px;
+              border: 2px solid var(--border);
+              font-family: monospace;
+              font-size: 0.95rem;
+              line-height: 1.8;
+              margin: 16px 0;
+            "
+          >
+            <strong>1.</strong> 進入新環境/新關係 →
+            表現良好、認真工作、照顧他人<br />
+            <strong>2.</strong> 蜜月期（數週~數月）→ 穩定、主動、有改變的意願<br />
+            <strong>3.</strong> 壓力累積 / 被要求面對問題 →
+            小謊言、花錢異常、態度轉變<br />
+            <strong>4.</strong> 迴避期 →
+            不接電話、已讀不回、態度惡劣、可能復吸<br />
+            <strong>5.</strong> 關係破裂 / 被趕出 →
+            被動接受、不主動修復、酗酒消沉<br />
+            <strong>6.</strong> 尋找下一個「家」→ 新的女友/寄宿對象 → 回到步驟 1
+          </div>
+          <p>
+            <strong>已知循環</strong>：高雄前女友 → 西門前女友 → 阿庭家 →
+            小恩（中壢/台南）→ 高雄家 → 現任女友
+          </p>
+
+          <h3>五、具體證據整理</h3>
+          <h4>5.1 說謊與現實落差</h4>
+          <div class="table-container">
+            <table>
+              <tr>
+                <th>戎狄的說詞</th>
+                <th>實際情況</th>
+                <th>來源</th>
+              </tr>
+              <tr>
+                <td>「這周才要搬出去」</td>
+                <td>上個月就沒回家了</td>
+                <td>家人</td>
+              </tr>
+              <tr>
+                <td>「有存幾萬元」</td>
+                <td>錢的來源不明，工作頻繁更換</td>
+                <td>小恩/家人</td>
+              </tr>
+              <tr>
+                <td>「每個月有還錢」</td>
+                <td>還款有進帳，但不符合收入狀況</td>
+                <td>小恩</td>
+              </tr>
+              <tr>
+                <td>2025 年「看起來好轉」</td>
+                <td>實際上完全斷絕家人聯繫</td>
+                <td>家人</td>
+              </tr>
+              <tr>
+                <td>博弈欠款自述 14W</td>
+                <td>老闆說 30W / 朋友間實際無明確欠款</td>
+                <td>多方矛盾</td>
+              </tr>
+            </table>
+          </div>
+
+          <h4>5.2 對照顧者的態度模式</h4>
+          <div class="table-container">
+            <table>
+              <tr>
+                <th>照顧者</th>
+                <th>初期態度</th>
+                <th>後期態度</th>
+              </tr>
+              <tr>
+                <td>姊姊/伯母</td>
+                <td>接受照顧</td>
+                <td>頂嘴、斷聯</td>
+              </tr>
+              <tr>
+                <td>小恩</td>
+                <td>依賴、撒嬌、表達在乎</td>
+                <td>態度惡劣、找事吵架、不回應</td>
+              </tr>
+              <tr>
+                <td>小恩媽</td>
+                <td>承諾會努力、尊敬</td>
+                <td>欺騙、不坦承</td>
+              </tr>
+              <tr>
+                <td>阿庭家</td>
+                <td>認真工作、照顧家務</td>
+                <td>不繳房租、被趕出</td>
+              </tr>
+            </table>
+          </div>
+          <p>
+            <strong>共同模式</strong
+            >：對真正照顧他的人，先依賴再推開。越親近、越關心他的人，最後越會被他惡劣對待。
+          </p>
+
+          <h3>六、預後評估</h3>
+          <h4>⛔ 不利因素</h4>
+          <ul>
+            <li>已形成穩固的迴避循環，且循環週期在縮短（從數月 → 數週）</li>
+            <li>缺乏病識感（不認為自己需要改變或就醫）</li>
+            <li>經濟基礎極度脆弱，無法支撐穩定生活</li>
+            <li>所有願意幫助的人均已表示放棄</li>
+            <li>目前新關係的對象無力處理其複雜問題</li>
+          </ul>
+          <h4>✅ 有利因素</h4>
+          <ul>
+            <li>2024 年 1-6 月曾在安全環境中展現真實情感與改變意願</li>
+            <li>在持續且密集的陪伴下，情緒調節能力可以暫時恢復</li>
+            <li>並非完全缺乏情感能力——具備愛的能力，但需極特殊條件才能啟動</li>
+            <li>年齡尚輕（23 歲），神經可塑性仍有空間</li>
+          </ul>
+          <h4>建議方向（如有專業介入機會）</h4>
+          <ol>
+            <li>
+              <strong>精神科評估</strong
+              >：排除或確認情緒障礙（如持續性憂鬱症、適應障礙）
+            </li>
+            <li>
+              <strong>心理治療</strong>：以依附取向治療（Attachment-Based
+              Therapy）或基模治療（Schema Therapy）處理核心信念
+            </li>
+            <li>
+              <strong>物質依賴評估</strong>：評估菸酒使用對神經功能的長期影響
+            </li>
+            <li>
+              <strong>社工介入</strong
+              >：協助建立穩定的生活結構（就業、財務、居住）
+            </li>
+          </ol>
+
+          <h3>七、結論</h3>
+          <p>
+            戎狄的核心議題並非單純的「不負責任」或「懶惰」，而是一套從早期依附創傷中發展出來的<strong>生存策略</strong>。他用迴避來保護自己不再受傷，用寄宿來填補缺失的家庭感，用謊言來維持表面的和平。這套策略在短期內有效——它讓他在各種困境中存活下來——但長期來看，它摧毀了所有他真正需要的關係。
+          </p>
+          <p>
+            最令人感慨的是：他確實擁有愛的能力。2024
+            年初那段日子證明了這一點。但要啟動那份能力，需要極高強度的安全感、持續的陪伴、以及他自身的主動意願——三個條件目前都已不存在。
+          </p>
+          <p>
+            在沒有專業介入的情況下，根據行為循環模型，預測其當前關係將在
+            <strong>3-6 個月內</strong>進入迴避期，並重複過往模式。
+          </p>
+          <p
+            style="
+              text-align: center;
+              color: var(--text-muted);
+              margin-top: 28px;
+              font-size: 0.9rem;
+            "
+          >
+            <em
+              >本分析僅供參考，不構成臨床診斷。如需正式評估，請諮詢精神科醫師或臨床心理師。</em
+            >
+          </p>
         </div>
 
-        <h4>三、系統衝突點：維度斷層分析</h4>
-        <div class="table-container">
-          <table>
-            <tr>
-              <th>衝突範疇</th>
-              <th>邏輯差異 (敘事者 vs. 對象)</th>
-              <th>系統性結果</th>
-            </tr>
-            <tr>
-              <td>時間維度</td>
-              <td>複利思維（看五年後）vs. 現值思維（看今晚）。</td>
-              <td>
-                溝通出現斷層，一人在談「階級躍遷」，另一人在談「即時止痛」。
-              </td>
-            </tr>
-            <tr>
-              <td>回饋機制</td>
-              <td>
-                邏輯回饋（學會了、存錢了）vs. 感官回饋（抱抱、性、尼古丁）。
-              </td>
-              <td>
-                遠距離導致感官回饋消失，對象的系統因缺乏即時驅動力而崩潰。
-              </td>
-            </tr>
-            <tr>
-              <td>壓力處理</td>
-              <td>Debug模式（分析並修復）vs. Escape模式（隱瞞並格式化）。</td>
-              <td>
-                當遇到困難，一人想追蹤錯誤日誌，另一人選擇重啟伺服器並刪除所有資料。
-              </td>
-            </tr>
-          </table>
+        <!-- ===== 超級毒辣版 ===== -->
+        <div id="tab-spicy" class="analysis-tab-panel">
+          <div class="tab-header spicy">
+            🌶️ 不留情面、直球對決、刀刀見骨<br />
+            本版本以極度直白的語言重新詮釋同一批事實。所有論述皆有事件佐證，只是不再用醫學術語幫他找台階下。
+          </div>
+
+          <h3>一、此人基本數據</h3>
+          <div class="table-container">
+            <table>
+              <tr>
+                <th>項目</th>
+                <th>內容</th>
+                <th>毒辣翻譯</th>
+              </tr>
+              <tr>
+                <td>年齡</td>
+                <td>23 歲</td>
+                <td>身體 23 歲，心智停在被趕出家那年的 17 歲</td>
+              </tr>
+              <tr>
+                <td>學歷</td>
+                <td>高職汽車科肄業</td>
+                <td>連高職都讀不完，重點是連一份工作都留不住</td>
+              </tr>
+              <tr>
+                <td>家庭背景</td>
+                <td>越南母親生下就走、父親嚴厲</td>
+                <td>被整個世界退貨過的小孩，長大後學會了先退貨別人</td>
+              </tr>
+              <tr>
+                <td>現況</td>
+                <td>與現任女友疑似同居，家人全部斷聯</td>
+                <td>找到新的免費旅館了，暫時穩定</td>
+              </tr>
+            </table>
+          </div>
+
+          <h3>二、行為模式：「寄生循環」</h3>
+          <p class="spicy-quote">
+            「這不是壞人，這是一個把所有人都變成配角的人。」
+          </p>
+          <div class="table-container">
+            <table>
+              <tr>
+                <th>步驟</th>
+                <th>行為</th>
+                <th>直白翻譯</th>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>進入新關係/新家庭</td>
+                <td>物色下一個宿主。標準：有房子住、願意被他利用、最好心軟</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>蜜月期表現良好</td>
+                <td>裝乖。煮飯、拖地、撒嬌、哭泣——全套表演到位</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>開始小謊話、花錢異常</td>
+                <td>原形畢露。他從來不是在「改變」，他只是在「演」</td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>已讀不回、態度惡劣</td>
+                <td>面具戴不住了，開始把對他最好的人當出氣筒</td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td>被趕出/關係崩壞 → 尋找下一家</td>
+                <td>Reset。清除存檔，開始新遊戲。帶走的：零成長、新的負債</td>
+              </tr>
+            </table>
+          </div>
+          <p>
+            <strong>已完成循環</strong>：高雄前女友 → 西門前女友 → 阿庭家 →
+            小恩（中壢/台南）→ 高雄家 → 現任女友<br />六段關係，六次相同的劇本。
+          </p>
+
+          <h3>三、「說謊」？不，這是一套作業系統</h3>
+          <p>
+            普通人說謊是偶爾犯錯，戎狄說謊是<strong>預設模式</strong>。真話才是例外。
+          </p>
+          <div class="table-container">
+            <table>
+              <tr>
+                <th>他說的</th>
+                <th>真相</th>
+                <th>毒辣評語</th>
+              </tr>
+              <tr>
+                <td>「這周才要搬出去」</td>
+                <td>上個月就沒回家了</td>
+                <td>連離家出走都要騙人日期——純粹是肌肉記憶</td>
+              </tr>
+              <tr>
+                <td>「有存幾萬元」</td>
+                <td>錢的來源不明</td>
+                <td>存款跟他的承諾一樣——聽聽就好</td>
+              </tr>
+              <tr>
+                <td>「每個月有還錢」</td>
+                <td>還款不符合收入</td>
+                <td>還了一點點。剩下 20 萬什麼時候還？下輩子？</td>
+              </tr>
+              <tr>
+                <td>2025「好轉」</td>
+                <td>完全斷絕家人聯繫</td>
+                <td>「好轉」= 騙術升級了</td>
+              </tr>
+              <tr>
+                <td>博弈欠款 14W</td>
+                <td>老闆說 30W</td>
+                <td>連自己欠多少錢都說謊</td>
+              </tr>
+            </table>
+          </div>
+
+          <h3>四、對照顧者的態度：農夫與蛇 × 4</h3>
+          <div class="table-container">
+            <table>
+              <tr>
+                <th>照顧者</th>
+                <th>他們為戎狄做了什麼</th>
+                <th>戎狄的回報</th>
+              </tr>
+              <tr>
+                <td>姊姊/伯母</td>
+                <td>從小拉拔長大、一路關心、幫還賭債</td>
+                <td>頂嘴、已讀不回、當作陌生人</td>
+              </tr>
+              <tr>
+                <td>小恩</td>
+                <td>花了兩年陪伴、借錢、安排工作、心理支持</td>
+                <td>態度惡劣、到處說謊、找事吵架、消失</td>
+              </tr>
+              <tr>
+                <td>小恩媽</td>
+                <td>當自己孩子疼、做飯、叮嚀</td>
+                <td>欺騙、不坦承、辜負信任</td>
+              </tr>
+              <tr>
+                <td>阿庭家</td>
+                <td>收留、給住的地方、融入家庭</td>
+                <td>不繳房租、捅出問題、被掃地出門</td>
+              </tr>
+            </table>
+          </div>
+          <p class="spicy-quote">
+            規律：對他越好的人，被他傷得越深。他就像一台壞掉的暖爐，誰靠近誰被燒。
+          </p>
+
+          <h3>五、「迴避型人格」？太客氣了</h3>
+          <ul>
+            <li><strong>「渴望親密但恐懼依賴」</strong> → 想蹭飯但不想洗碗</li>
+            <li>
+              <strong>「迴避情感表達」</strong> →
+              問他愛不愛你，他說「不知道」。翻譯：你是工具人，他懶得演了
+            </li>
+            <li><strong>「在壓力下撤退」</strong> → 一遇到問題就裝死</li>
+            <li>
+              <strong>「功能性角色取得歸屬」</strong> →
+              用煮飯拖地當房租——精算下來連計時工時薪都不到
+            </li>
+            <li>
+              <strong>「失去關係後極度痛苦但不修復」</strong> →
+              會哭、會喝酒——但就是不會道歉、不會改、不會回頭
+            </li>
+          </ul>
+
+          <h3>六、核心信念翻譯</h3>
+          <div class="table-container">
+            <table>
+              <tr>
+                <th>學術說法</th>
+                <th>毒辣翻譯</th>
+              </tr>
+              <tr>
+                <td>「依賴他人最終會被拋棄」</td>
+                <td>所以我先拋棄你——至少這樣是我選的</td>
+              </tr>
+              <tr>
+                <td>「付出不會被感激」</td>
+                <td>所以我乾脆不付出。反正你們欠我的</td>
+              </tr>
+              <tr>
+                <td>「我不值得被真正愛」</td>
+                <td>
+                  所以好好愛我的人一定有問題，我得趕快破壞掉來驗證我的假設
+                </td>
+              </tr>
+            </table>
+          </div>
+          <p class="spicy-quote">
+            三條信念組合起來就是：「這個世界虧欠我，但我也不敢去要——所以我用偷的。」<br />偷感情、偷信任、偷安全感——拿到手之後用到壞掉就丟掉，然後去偷下一個。
+          </p>
+
+          <h3>七、「可憐」不是免死金牌</h3>
+          <p>
+            是，他的童年很慘。母親拋棄、父親嚴厲、17
+            歲被趕出家門。但這裡有一個殘忍的事實：<strong
+              >很多人有類似甚至更慘的經歷，但沒有選擇用同樣的方式生活。</strong
+            >
+          </p>
+          <ul>
+            <li>他姊姊同樣的家庭出來的，正常過日子</li>
+            <li>小恩也並非一帆風順，但選擇了面對</li>
+            <li>阿庭家的孩子們也各有困難，但沒有人像他一樣</li>
+          </ul>
+          <p>
+            23 歲了。被趕出家門到現在 6 年。6
+            年的時間，可以讀完一個學士加碩士。他做了什麼？從一個人的沙發換到另一個人的床。
+          </p>
+
+          <h3>八、給現任女友的預言</h3>
+          <div class="table-container">
+            <table>
+              <tr>
+                <th>時間點</th>
+                <th>你會經歷什麼</th>
+              </tr>
+              <tr>
+                <td>現在～第 1 個月</td>
+                <td>
+                  甜蜜期。他會煮飯、撒嬌、說你是他的全世界。恭喜你中了彩票
+                </td>
+              </tr>
+              <tr>
+                <td>第 2～3 個月</td>
+                <td>
+                  他開始借錢。先是小額，然後越來越大。問他幹嘛用？「不要管啦」
+                </td>
+              </tr>
+              <tr>
+                <td>第 3～4 個月</td>
+                <td>你發現他沒去上班，或又換工作了。問怎麼了？他說你管太多</td>
+              </tr>
+              <tr>
+                <td>第 4～5 個月</td>
+                <td>已讀不回開始出現。你傳訊息他不看，打電話他不接</td>
+              </tr>
+              <tr>
+                <td>第 5～6 個月</td>
+                <td>選項 A：他直接消失。選項 B：你忍不住把他趕出去</td>
+              </tr>
+              <tr>
+                <td>第 6 個月之後</td>
+                <td>
+                  他出現在另一個女生的家裡，重新開始 Step
+                  1。而你手上多了一張欠條
+                </td>
+              </tr>
+            </table>
+          </div>
+          <p>小恩用了兩年走完這個循環。阿庭家也是。希望你不需要那麼久。</p>
+
+          <h3>九、殘酷的數學題</h3>
+          <div class="table-container">
+            <table>
+              <tr>
+                <th>投入者</th>
+                <th>付出成本</th>
+                <th>戎狄的回報</th>
+              </tr>
+              <tr>
+                <td>小恩</td>
+                <td>
+                  2 年時間 + 情感勞動 + 金錢借貸 + 安排工作住處 + 心理代價
+                </td>
+                <td>每一段都是零。不，是負數</td>
+              </tr>
+              <tr>
+                <td>阿庭家</td>
+                <td>收留 + 照顧 + 信任</td>
+                <td>不繳房租、被控偷竊</td>
+              </tr>
+              <tr>
+                <td>姊姊/伯母</td>
+                <td>從小到大的養育 + 8W 賭債代償</td>
+                <td>頂嘴、斷聯</td>
+              </tr>
+            </table>
+          </div>
+          <p style="text-align: right; font-weight: bold; color: #e65100">
+            投資報酬率：-∞
+          </p>
+
+          <h3>十、結語</h3>
+          <p>
+            這不是一個壞人的故事。這是一個<strong>把所有人都變成配角的人</strong>的故事。在戎狄的世界裡，所有人都是佈景——姊姊是童年的佈景、阿庭家是過渡期的佈景、小恩是最華麗的佈景、現任女友是最新的佈景。
+          </p>
+          <p>
+            他從一個舞台走到另一個舞台，演著相同的戲碼，說著相同的台詞。唯一改變的是觀眾席的人。
+          </p>
+          <p class="spicy-quote">
+            而那些被他用過的佈景，還留在原地，慢慢收拾他離開後的殘局。
+          </p>
+          <p
+            style="
+              text-align: center;
+              color: var(--text-muted);
+              font-size: 0.9rem;
+            "
+          >
+            <em
+              >本分析的所有論述均基於可驗證的事實記錄。語氣辛辣，但每一刀都是有事實支撐的手術刀。</em
+            >
+          </p>
         </div>
 
-        <p><strong>使用建議：</strong></p>
-        <ol>
-          <li>
-            中性化的力量：當你用「高度避險機制」替代「逃避」，用「系統優化思維」替代「控制慾」時，故事的深度會從感性的怨懟提升到社會分層的客觀觀察。
-          </li>
-          <li>
-            故事張力：這種寫法最迷人的地方在於「不相容」。你的生活是Linux伺服器（高效率、高穩定、嚴謹權限管理），而他是90年代的家用磁碟片（容量小、易損壞、無法運行高階代碼）。
-          </li>
-        </ol>
+        <!-- ===== 終極毒辣真實版 ===== -->
+        <div id="tab-ultimate" class="analysis-tab-panel">
+          <div class="tab-header ultimate">
+            💀
+            停止用「受傷的孩子」來洗白，他只是個精於算計的「情感掠奪性寄生蟲」。<br />
+            資料來源：2024-2026
+            實測紀實、多任前女友受害史、欠款紀錄、偷買點數事件。
+          </div>
+
+          <h3>一、基本屬性：寄生等級評定</h3>
+          <div class="table-container">
+            <table>
+              <tr>
+                <th>項目</th>
+                <th>表面人設</th>
+                <th>毒辣真相（基於事實）</th>
+              </tr>
+              <tr>
+                <td><strong>生存手段</strong></td>
+                <td>粗工、工程、物流</td>
+                <td>
+                  <strong>找「免錢旅館」的能力遠強於工作能力。</strong>21
+                  歲至今換過 N
+                  份工作，沒一個留得住，但「女朋友」和「收留家庭」從不間斷。
+                </td>
+              </tr>
+              <tr>
+                <td><strong>性格標籤</strong></td>
+                <td>害羞、社恐、憂鬱症</td>
+                <td>
+                  <strong>選擇性社交障礙。</strong
+                  >面對債主時很社恐，但在網路上偷買點數、跟妹子玩時比誰都穩。
+                </td>
+              </tr>
+              <tr>
+                <td><strong>財富狀態</strong></td>
+                <td>欠債受害者</td>
+                <td>
+                  <strong>情感高利貸慣犯。</strong>欠小恩家幾十萬，轉頭偷買
+                  $5,640 遊戲點數。他的「沒錢」是勒索同情心的工具。
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <h3>二、謊言與現實的打臉現場</h3>
+          <p>這不是心理分析，這是<strong>「詐騙手法拆解」</strong>。</p>
+          <div class="table-container">
+            <table>
+              <tr>
+                <th>案發時間</th>
+                <th>他的說法</th>
+                <th>真實發生的事實</th>
+                <th>毒辣點評</th>
+              </tr>
+              <tr>
+                <td><strong>2024.01</strong></td>
+                <td>「我沒錢，借我 $300。」</td>
+                <td>連 $300 都還不出來，卻有錢抽菸。</td>
+                <td>
+                  <strong>測試宿主底線：</strong
+                  >用極低成本測試你是不是個好騙的聖母。
+                </td>
+              </tr>
+              <tr>
+                <td><strong>2024.03</strong></td>
+                <td>「我有憂鬱症，我好怕失去你。」</td>
+                <td>拿著小恩給的資源，回頭就消失。</td>
+                <td>
+                  <strong>情緒勒索：</strong>憂鬱症只是「不想負責」的免死金牌。
+                </td>
+              </tr>
+              <tr>
+                <td><strong>2024.03</strong></td>
+                <td>「欠債只有 14 萬。」</td>
+                <td>老闆說 30 萬，姊姊說幫還過 8 萬。</td>
+                <td><strong>數據造假：</strong>債務數字永遠是隨機生成的。</td>
+              </tr>
+              <tr>
+                <td><strong>2024.04</strong></td>
+                <td>「我會改，我絕對不買點數了。」</td>
+                <td>偷買點數 $5,640，還說「下個月還」。</td>
+                <td><strong>江山易改，本性難移。</strong></td>
+              </tr>
+              <tr>
+                <td><strong>2024.05</strong></td>
+                <td>「小恩媽就是我親媽。」</td>
+                <td>小恩媽給 3 萬生活費，他瞬間花光。</td>
+                <td><strong>噬親行為：</strong>誰對他越好，他就啃得越深。</td>
+              </tr>
+            </table>
+          </div>
+
+          <h3>三、情感掠奪路徑：農夫與蛇的循環</h3>
+          <p>
+            戎狄的人生是一場不斷尋找「替代性父母」的過程。他需要的不是情人，是<strong>「帶薪保姆」</strong>。
+          </p>
+          <ol>
+            <li>
+              <strong>西門前女友：</strong
+              >每天騎車去接送，看似深情，實則寄生於對方的家庭感。
+            </li>
+            <li>
+              <strong>阿庭家：</strong
+              >幫顧小孩、泡奶。用廉價勞動力換取免費食宿，一旦被要求付房租即翻臉。
+            </li>
+            <li>
+              <strong>小恩家 (2024-2025)：</strong
+              >目前為止釣到最大的魚。小恩幫他逃亡、還債、買新手機。他的報答？「已讀不回」、「態度惡劣」、「偷買點數」。
+            </li>
+            <li>
+              <strong>現任女友 (高雄)：</strong
+              >目前正在上演「剛認識時的裝乖期」。
+            </li>
+          </ol>
+
+          <h3>四、核心信念：「受害者心理」</h3>
+          <ul>
+            <li>
+              <strong>「因為我媽拋棄我，所以你們對我好是應該的。」</strong>
+            </li>
+            <li>
+              <strong
+                >「因為我爸很嚴厲，所以我墮落、賭博、說謊都是情有可原的。」</strong
+              >
+            </li>
+            <li>
+              <strong
+                >「因為我有社恐，所以我不用工作、不用回訊息、不用面對現實。」</strong
+              >
+            </li>
+          </ul>
+          <p>他利用別人的正義感和同情心，為自己的無能與自私築起一道防護牆。</p>
+
+          <h3>五、給「現任宿主」的災難預言</h3>
+          <ol>
+            <li>
+              <strong>前 3 個月（甜蜜期）：</strong
+              >他會煮飯、會撒嬌、會說妳救了他。妳覺得妳是他的光。
+            </li>
+            <li>
+              <strong>第 4-6 個月（索取期）：</strong
+              >他開始換工作，或者「剛好」遇到困難需要妳代墊小錢。
+            </li>
+            <li>
+              <strong>第 6-12 個月（衝突期）：</strong
+              >妳發現他偷偷玩遊戲、說謊、錢對不起來。他開始「社恐」發作、裝憂鬱、搞消失。
+            </li>
+            <li>
+              <strong>結局（崩壞期）：</strong
+              >他捲走妳最後的信任（和錢），跳到下一個女人的床上，然後跟她說妳是控制欲強的瘋子。
+            </li>
+          </ol>
+
+          <h3>六、結語：他不是壞人，他是「廢人」</h3>
+          <p>
+            壞人尚且有野心，戎狄連野心都沒有。他只想維持最低限度的生存，並由別人買單。
+          </p>
+          <div class="ultimate-quote">
+            「對張戎狄這種人，最好的拯救就是『不救』。讓他去流浪、讓他去面對債主、讓他去感受現實的耳光。只要有人餵他一口軟飯，他就永遠不會站起來走路。」
+          </div>
+          <p
+            style="
+              text-align: center;
+              font-weight: bold;
+              color: var(--primary);
+              margin-top: 24px;
+            "
+          >
+            你還在心疼他？他在刷妳的卡買點數時，可一點都沒心疼過妳。
+          </p>
+          <p
+            style="
+              text-align: center;
+              color: var(--text-muted);
+              font-size: 0.9rem;
+              margin-top: 28px;
+            "
+          >
+            <em>本文件由事實紀錄自動生成，冷血但精準。</em>
+          </p>
+        </div>
       </div>
     </main>
 
     <footer>
       本HTML檔案已完整保留<b>所有原始內容與色情細節</b><br />
       本次更新聚焦於版型、閱讀節奏與 RWD 體驗優化 • 個人地址已全面替換為代稱<br />
-      最後整理時間：2026-04-03T00:00:00+08:00
+      最後整理時間：2026-04-05T08:00:00+08:00
     </footer>
 
     <script>
@@ -2336,6 +3977,99 @@
         // 首次加載時更新
         updateProgressBar();
       })();
+
+      /**
+       * 滾動淡入動畫
+       * 使用 IntersectionObserver 監聽區塊進入視窗
+       */
+      (function () {
+        try {
+          var targets = document.querySelectorAll(
+            '.section, .timeline-item, header'
+          );
+          if (!targets.length || !('IntersectionObserver' in window)) {
+            // 不支援 Observer 時直接顯示
+            for (var i = 0; i < targets.length; i++) {
+              targets[i].classList.add('visible');
+            }
+            return;
+          }
+
+          var observer = new IntersectionObserver(
+            function (entries) {
+              entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                  entry.target.classList.add('visible');
+                  observer.unobserve(entry.target);
+                }
+              });
+            },
+            { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
+          );
+
+          targets.forEach(function (el) {
+            observer.observe(el);
+          });
+        } catch (error) {
+          console.warn('淡入動畫初始化失敗:', error);
+          // 降級：直接顯示
+          var fallback = document.querySelectorAll(
+            '.section, .timeline-item, header'
+          );
+          for (var k = 0; k < fallback.length; k++) {
+            fallback[k].classList.add('visible');
+          }
+        }
+      })();
+
+      /**
+       * 心理分析標籤切換功能
+       * 切換中立醫療版、毒辣版、終極毒辣版的顯示面板
+       * @param {string} tabId - 標籤識別碼 ('neutral' | 'spicy' | 'ultimate')
+       */
+      function switchAnalysisTab(tabId) {
+        try {
+          // 移除所有面板的 active 狀態
+          var panels = document.querySelectorAll('.analysis-tab-panel');
+          for (var i = 0; i < panels.length; i++) {
+            panels[i].classList.remove('active');
+          }
+
+          // 移除所有按鈕的 active 狀態
+          var btns = document.querySelectorAll('.analysis-tab-btn');
+          for (var j = 0; j < btns.length; j++) {
+            btns[j].classList.remove(
+              'active',
+              'active-spicy',
+              'active-ultimate'
+            );
+          }
+
+          // 啟用對應面板
+          var targetPanel = document.getElementById('tab-' + tabId);
+          if (targetPanel) {
+            targetPanel.classList.add('active');
+          }
+
+          // 啟用對應按鈕並套用對應顏色
+          var targetBtn = document.querySelector(
+            '.analysis-tab-btn[data-tab="' + tabId + '"]'
+          );
+          if (targetBtn) {
+            if (tabId === 'spicy') {
+              targetBtn.classList.add('active-spicy');
+            } else if (tabId === 'ultimate') {
+              targetBtn.classList.add('active-ultimate');
+            } else {
+              targetBtn.classList.add('active');
+            }
+          }
+
+          console.log('已切換至分析標籤:', tabId);
+        } catch (error) {
+          console.error('標籤切換失敗:', error);
+        }
+      }
     </script>
   </body>
 </html>
